@@ -1,0 +1,46 @@
+{
+  "name": "retcl",
+  "version": "1.0.0",
+  "description": "Welcome to your new CAP project.",
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cds-serve",
+    "watch-fleet": "cds watch --open fleet/index.html?sap-ui-xx-viewCache=false --livereload false",
+    "watch-inspections": "cds watch --open inspections/index.html?sap-ui-xx-viewCache=false --livereload false",
+    "watch-billing": "cds watch --open com.retcl.billing.billing/index.html?sap-ui-xx-viewCache=false --livereload false",
+    "watch-maintenance": "cds watch --open com.retcl.maintenance.maintenance/index.html?sap-ui-xx-viewCache=false --livereload false",
+    "watch-customers": "cds watch --open com.retcl.customers.customers/index.html?sap-ui-xx-viewCache=false --livereload false",
+    "watch-rentals": "cds watch --open com.retcl.rentals.rentals/index.html?sap-ui-xx-viewCache=false --livereload false",
+    "watch-overview": "cds watch --open com.retcl.overview.overview/index.html?sap-ui-xx-viewCache=false --livereload false",
+    "watch-retcldashboard": "cds watch --open com.retcl.dashboard.retcldashboard/index.html?sap-ui-xx-viewCache=false --livereload false"
+  },
+  "dependencies": {
+    "@cap-js/hana": "^3.1.2",
+    "@sap/cds": "^10",
+    "@sap/cds-dk": "^10.1.0",
+    "@sap/xssec": "^4.15.0"
+  },
+  "devDependencies": {
+    "@cap-js/sqlite": "^3",
+    "cds-plugin-ui5": "^0.17.0"
+  },
+  "private": true,
+  "workspaces": [
+    "app/*"
+  ],
+  "sapux": [
+    "app/fleet",
+    "app/fleet",
+    "app/inspections",
+    "app/billing",
+    "app/maintenance",
+    "app/customers",
+    "app/rentals",
+    "app/overview",
+    "app/retcldashboard"
+  ]
+}

@@ -1,0 +1,391 @@
+POST http://localhost:4004/odata/v4/catalog/createCustomers
+Content-Type: application/json
+
+{
+  "input": [
+    {
+      "ID": "f35eeba4-f2ef-4030-a7ec-40970d9c0302",
+      "COMPANY_NAME": "ABC Construction",
+      "CONTACT_PERSON": "Ravi Kumar",
+      "EMAIL": "ravi@abcconstruction.com",
+      "PHONE": "9876543210",
+      "ADDRESS": "MG Road, Bangalore",
+      "S4_CUSTOMER_ID": "S4CUST001"
+    },
+    {
+      "ID": "ac220eeb-ae6d-4b05-918e-ec2d54c75e19",
+      "COMPANY_NAME": "XYZ Infra",
+      "CONTACT_PERSON": "Anil Sharma",
+      "EMAIL": "anil@xyzinfra.com",
+      "PHONE": "9876543211",
+      "ADDRESS": "Jubilee Hills, Hyderabad",
+      "S4_CUSTOMER_ID": "S4CUST002"
+    },
+    {
+      "ID": "16dee47c-82c8-4796-a9e5-8db5dd5a6489",
+      "COMPANY_NAME": "Metro Builders",
+      "CONTACT_PERSON": "Suresh Reddy",
+      "EMAIL": "suresh@metrobuilders.com",
+      "PHONE": "9876543212",
+      "ADDRESS": "Banjara Hills, Hyderabad",
+      "S4_CUSTOMER_ID": "S4CUST003"
+    }
+  ]
+}
+
+###
+POST http://localhost:4004/odata/v4/catalog/createRentals
+Content-Type: application/json
+
+{
+  "input": [
+    {
+      "ID": "7ea51a2c-54bd-4088-a3d8-2cddb44704b",
+      "CUSTOMER_ID": "f35eeba4-f2ef-4030-a7ec-40970d9c0302",
+      "RENTAL_DATE": "2026-10-01",
+      "EXPECTED_RETURN_DATE": "2026-10-10",
+      "ACTUAL_RETURN_DATE": "2026-10-20",
+      "RENTAL_STATUS": "ACTIVE",
+      "TOTAL_RENTAL_AMOUNT": 15000.00
+    },
+    {
+      "ID": "b75c5e54-6a49-4a28-9bd3-3c73c7a4da83",
+      "CUSTOMER_ID": "ac220eeb-ae6d-4b05-918e-ec2d54c75e19",
+      "RENTAL_DATE": "2026-10-05",
+      "EXPECTED_RETURN_DATE": "2026-10-15",
+      "ACTUAL_RETURN_DATE": "2026-10-13",
+      "RENTAL_STATUS": "CREATED",
+      "TOTAL_RENTAL_AMOUNT": 25000.00
+    },
+    {
+      "ID": "f0453528-5117-4205-8a0c-7873d0dc4fa1",
+      "CUSTOMER_ID": "16dee47c-82c8-4796-a9e5-8db5dd5a6489",
+      "RENTAL_DATE": "2026-10-08",
+      "EXPECTED_RETURN_DATE": "2026-10-18",
+      "ACTUAL_RETURN_DATE": "2026-10-25",
+      "RENTAL_STATUS": "COMPLETED",
+      "TOTAL_RENTAL_AMOUNT": 18000.00
+    }
+  ]
+}
+
+###
+POST http://localhost:4004/odata/v4/catalog/createRentalItems
+Content-Type: application/json
+
+{
+  "input": [
+    {
+      "ID": "a7ef1057-bf13-4410-bd12-88438938ab77",
+      "RENTAL_ID": "7ea51a2c-54bd-4088-a3d8-2cddb44704b",
+      "EQUIPMENT_ID": "4c51ccf1-7130-4083-b640-a13cd2c64fbe",
+      "DAILY_RENTAL_RATE": 500.00,
+      "START_DATE": "2026-10-01",
+      "END_DATE": "2026-10-10",
+      "ITEM_STATUS": "RENTED"
+    },
+    {
+      "ID": "fbcefc23-840e-45a4-ba60-b0772db7aac7",
+      "RENTAL_ID": "b75c5e54-6a49-4a28-9bd3-3c73c7a4da83",
+      "EQUIPMENT_ID": "acc8e2eb-dc17-4b75-bd53-eb14c26aa839",
+      "DAILY_RENTAL_RATE": 700.00,
+      "START_DATE": "2026-10-05",
+      "END_DATE": "2026-10-15",
+      "ITEM_STATUS": "RESERVED"
+    },
+    {
+      "ID": "6e883370-dc92-4161-81f8-d1cc3b88286f",
+      "RENTAL_ID": "f0453528-5117-4205-8a0c-7873d0dc4fa1",
+      "EQUIPMENT_ID": "a24f2657-d50b-4d19-8969-d17654c89206",
+      "DAILY_RENTAL_RATE": 300.00,
+      "START_DATE": "2026-10-08",
+      "END_DATE": "2026-10-18",
+      "ITEM_STATUS": "RETURNED"
+    }
+  ]
+}
+
+###
+POST http://localhost:4004/odata/v4/catalog/createEquipments
+Content-Type: application/json
+
+{
+  "input": [
+    {
+      "ID": "4c51ccf1-7130-4083-b640-a13cd2c64fbe",
+      "LOCATION_ID": "ea065a7b-119e-4195-9711-20ff1f3c520d",
+      "EQUIPMENT_NAME": "Excavator",
+      "EQUIPMENT_TYPE": "Heavy Machinery",
+      "MANUFACTURER": "Caterpillar",
+      "MODEL": "CAT320",
+      "SERIAL_NUMBER": "CAT001",
+      "PURCHASE_DATE": "2025-01-15",
+      "RENTAL_RATE_PER_DAY": 500.00,
+      "CURRENT_STATUS": "AVAILABLE"
+    },
+    {
+      "ID": "acc8e2eb-dc17-4b75-bd53-eb14c26aa839",
+      "LOCATION_ID": "364ac36c-ee2f-4dd2-88e3-f6b4b9b5ae10",
+      "EQUIPMENT_NAME": "Bulldozer",
+      "EQUIPMENT_TYPE": "Heavy Machinery",
+      "MANUFACTURER": "Komatsu",
+      "MODEL": "D65",
+      "SERIAL_NUMBER": "KOM001",
+      "PURCHASE_DATE": "2025-02-18",
+      "RENTAL_RATE_PER_DAY": 700.00,
+      "CURRENT_STATUS": "RENTED"
+    },
+    {
+      "ID": "a24f2657-d50b-4d19-8969-d17654c89206",
+      "LOCATION_ID": "c9838e16-da97-40ad-80e6-e95cbb15ad2c",
+      "EQUIPMENT_NAME": "Forklift",
+      "EQUIPMENT_TYPE": "Warehouse Equipment",
+      "MANUFACTURER": "Toyota",
+      "MODEL": "8FGCU25",
+      "SERIAL_NUMBER": "TYT001",
+      "PURCHASE_DATE": "2025-03-10",
+      "RENTAL_RATE_PER_DAY": 300.00,
+      "CURRENT_STATUS": "MAINTENANCE"
+    }
+  ]
+}
+
+###
+POST http://localhost:4004/odata/v4/catalog/createLocations
+Content-Type: application/json
+
+{
+  "input": [
+    {
+      "ID": "ea065a7b-119e-4195-9711-20ff1f3c520d",
+      "LOCATION_NAME": "Bangalore Warehouse",
+      "LOCATION_TYPE": "WAREHOUSE",
+      "ADDRESS": "Whitefield",
+      "CITY": "Bangalore",
+      "LATITUDE": 12.971600,
+      "LONGITUDE": 77.594600
+    },
+    {
+      "ID": "364ac36c-ee2f-4dd2-88e3-f6b4b9b5ae10",
+      "LOCATION_NAME": "Hyderabad Depot",
+      "LOCATION_TYPE": "DEPOT",
+      "ADDRESS": "Gachibowli",
+      "CITY": "Hyderabad",
+      "LATITUDE": 17.443500,
+      "LONGITUDE": 78.377200
+    },
+    {
+      "ID": "c9838e16-da97-40ad-80e6-e95cbb15ad2c",
+      "LOCATION_NAME": "Chennai Service Center",
+      "LOCATION_TYPE": "SERVICE_CENTER",
+      "ADDRESS": "OMR",
+      "CITY": "Chennai",
+      "LATITUDE": 13.082700,
+      "LONGITUDE": 80.270700
+    }
+  ]
+}
+
+###
+POST http://localhost:4004/odata/v4/catalog/createRepairBills
+Content-Type: application/json
+
+{
+  "input": [
+    {
+      "ID": "23c39e9b-a87a-47a5-8e63-ce31848b6791",
+      "RENTAL_ID": "7ea51a2c-54bd-4088-a3d8-2cddb44704b",
+      "CUSTOMER_ID": "f35eeba4-f2ef-4030-a7ec-40970d9c0302",
+      "DAMAGE_ID": "e2d4092d-7a3a-4110-8868-4148435209c6",
+      "BILL_DATE": "2026-10-12",
+      "REPAIR_AMOUNT": 1500.00,
+      "TAX_AMOUNT": 270.00,
+      "TOTAL_AMOUNT": 1770.00,
+      "BILLING_STATUS": "DRAFT",
+      "S4_BILLING_DOCUMENT_ID": "S4BILL001"
+    },
+    {
+      "ID": "2acabb10-8d83-49a2-bf37-ef5641dcfee2",
+      "RENTAL_ID": "b75c5e54-6a49-4a28-9bd3-3c73c7a4da83",
+      "CUSTOMER_ID": "ac220eeb-ae6d-4b05-918e-ec2d54c75e19",
+      "DAMAGE_ID": "57be99e9-1add-4631-8901-d52f13ee205c",
+      "BILL_DATE": "2026-10-16",
+      "REPAIR_AMOUNT": 4500.00,
+      "TAX_AMOUNT": 810.00,
+      "TOTAL_AMOUNT": 5310.00,
+      "BILLING_STATUS": "APPROVED",
+      "S4_BILLING_DOCUMENT_ID": "S4BILL002"
+    },
+    {
+      "ID": "0d9c45d4-cbde-4f6c-b3d6-e9ba2edc580e",
+      "RENTAL_ID": "f0453528-5117-4205-8a0c-7873d0dc4fa1",
+      "CUSTOMER_ID": "16dee47c-82c8-4796-a9e5-8db5dd5a6489",
+      "DAMAGE_ID": "9552ff29-29d5-496e-9fa4-626e28e67cc8",
+      "BILL_DATE": "2026-10-19",
+      "REPAIR_AMOUNT": 25000.00,
+      "TAX_AMOUNT": 4500.00,
+      "TOTAL_AMOUNT": 29500.00,
+      "BILLING_STATUS": "POSTED_TO_S4",
+      "S4_BILLING_DOCUMENT_ID": "S4BILL003"
+    }
+  ]
+}
+
+###
+POST http://localhost:4004/odata/v4/catalog/createConditionLogs
+Content-Type: application/json
+
+{
+  "input": [
+    {
+      "ID": "490f8ca4-bc4b-4b2b-a0fe-7ebb624cc653",
+      "EQUIPMENT_ID": "4c51ccf1-7130-4083-b640-a13cd2c64fbe",
+      "RENTAL_ID": "7ea51a2c-54bd-4088-a3d8-2cddb44704b",
+      "INSPECTION_DATE": "2026-10-10T10:00:00Z",
+      "INSPECTION_TYPE": "RETURN",
+      "CONDITION_GRADE": "GOOD",
+      "INSPECTOR_NAME": "Kiran",
+      "METER_READING": 250.00,
+      "NOTES": "No major issues."
+    },
+    {
+      "ID": "e6389b1e-1667-44c1-9522-c937224d091f",
+      "EQUIPMENT_ID": "acc8e2eb-dc17-4b75-bd53-eb14c26aa839",
+      "RENTAL_ID": "b75c5e54-6a49-4a28-9bd3-3c73c7a4da83",
+      "INSPECTION_DATE": "2026-10-15T09:30:00Z",
+      "INSPECTION_TYPE": "CHECKOUT",
+      "CONDITION_GRADE": "EXCELLENT",
+      "INSPECTOR_NAME": "Ajay",
+      "METER_READING": 420.50,
+      "NOTES": "Equipment ready."
+    },
+    {
+      "ID": "da63dc02-415b-4f79-a802-9d20dc6b33c3",
+      "EQUIPMENT_ID": "a24f2657-d50b-4d19-8969-d17654c89206",
+      "RENTAL_ID": "f0453528-5117-4205-8a0c-7873d0dc4fa1",
+      "INSPECTION_DATE": "2026-10-18T12:00:00Z",
+      "INSPECTION_TYPE": "PERIODIC",
+      "CONDITION_GRADE": "FAIR",
+      "INSPECTOR_NAME": "Venu",
+      "METER_READING": 150.75,
+      "NOTES": "Maintenance recommended."
+    }
+  ]
+}
+
+###
+POST http://localhost:4004/odata/v4/catalog/createMaintenanceRecords
+Content-Type: application/json
+
+{
+  "input": [
+    {
+      "ID": "f8864490-ea18-49f3-a8a7-5f62398dc32f",
+      "EQUIPMENT_ID": "4c51ccf1-7130-4083-b640-a13cd2c64fbe",
+      "MAINTENANCE_TYPE": "PREVENTIVE",
+      "MAINTENANCE_DATE": "2026-10-20",
+      "DESCRIPTION": "Routine maintenance and lubrication",
+      "SERVICE_PROVIDER": "ABC Equipment Services",
+      "COST": 2500.00,
+      "NEXT_MAINTENANCE_DATE": "2027-01-20",
+      "STATUS": "COMPLETED"
+    },
+    {
+      "ID": "9c6d27bd-8759-4b3c-ac70-7b3186971ae3",
+      "EQUIPMENT_ID": "acc8e2eb-dc17-4b75-bd53-eb14c26aa839",
+      "MAINTENANCE_TYPE": "CORRECTIVE",
+      "MAINTENANCE_DATE": "2026-10-21",
+      "DESCRIPTION": "Hydraulic system repair",
+      "SERVICE_PROVIDER": "HydroTech Repairs",
+      "COST": 8500.00,
+      "NEXT_MAINTENANCE_DATE": "2027-02-21",
+      "STATUS": "IN_PROGRESS"
+    },
+    {
+      "ID": "f49b1e34-f92f-4424-bf9b-0f1352684dc4",
+      "EQUIPMENT_ID": "a24f2657-d50b-4d19-8969-d17654c89206",
+      "MAINTENANCE_TYPE": "INSPECTION",
+      "MAINTENANCE_DATE": "2026-10-22",
+      "DESCRIPTION": "Annual safety inspection",
+      "SERVICE_PROVIDER": "SafeEquip Inspection Services",
+      "COST": 1200.00,
+      "NEXT_MAINTENANCE_DATE": "2027-10-22",
+      "STATUS": "SCHEDULED"
+    }
+  ]
+}
+
+###
+POST http://localhost:4004/odata/v4/catalog/createDamageRecords
+Content-Type: application/json
+
+{
+  "input": [
+    {
+      "ID": "e2d4092d-7a3a-4110-8868-4148435209f6",
+      "CONDITION_ID": "490f8ca4-bc4b-4b2b-a0fe-7ebb624cc653",
+      "DAMAGE_TYPE": "Dent",
+      "DAMAGE_DESCRIPTION": "Minor dent on left side panel",
+      "SEVERITY": "LOW",
+      "REPAIR_ESTIMATE": 1500.00,
+      "CUSTOMER_LIABLE": true,
+      "DAMAGE_STATUS": "REPORTED"
+    },
+    {
+      "ID": "57be99e9-1add-4631-8901-d52f13ee215c",
+      "CONDITION_ID": "e6389b1e-1667-44c1-9522-c937224d091f",
+      "DAMAGE_TYPE": "Hydraulic Leak",
+      "DAMAGE_DESCRIPTION": "Hydraulic oil leakage detected",
+      "SEVERITY": "MEDIUM",
+      "REPAIR_ESTIMATE": 4500.00,
+      "CUSTOMER_LIABLE": false,
+      "DAMAGE_STATUS": "REVIEWED"
+    },
+    {
+      "ID": "9552ff29-29d5-496e-9fa4-626e28e67cr8",
+      "CONDITION_ID": "da63dc02-415b-4f79-a802-9d20dc6b33c3",
+      "DAMAGE_TYPE": "Engine Failure",
+      "DAMAGE_DESCRIPTION": "Engine not starting after return",
+      "SEVERITY": "HIGH",
+      "REPAIR_ESTIMATE": 25000.00,
+      "CUSTOMER_LIABLE": true,
+      "DAMAGE_STATUS": "IN_REPAIR"
+    }
+  ]
+}
+
+###
+POST http://localhost:4004/odata/v4/catalog/createDamagePhotos
+Content-Type: application/json
+
+{
+  "input": [
+    {
+      "ID": "c7cb3992-b866-498e-8512-6f6f4b6a9ef4",
+      "DAMAGE_ID": "e2d4092d-7a3a-4110-8868-4148435209f6",
+      "FILE_NAME": "dent_panel.jpg",
+      "MEDIA_TYPE": "image/jpeg",
+      "PHOTO_CONTENT": "/9j/4AAQSkZJRgABAQEAYABgAAD...",
+      "UPLOADED_AT": "2026-10-10T10:30:00Z",
+      "UPLOADED_BY": "Kiran"
+    },
+    {
+      "ID": "2db7164b-cad1-4d7e-b2fe-ce39fbac5fpd",
+      "DAMAGE_ID": "57be99e9-1add-4631-8901-d52f13ee215c",
+      "FILE_NAME": "hydraulic_leak.jpg",
+      "MEDIA_TYPE": "image/jpeg",
+      "PHOTO_CONTENT": "iVBORw0KGgoAAAANSUhEUgAA...",
+      "UPLOADED_AT": "2026-10-15T11:15:00Z",
+      "UPLOADED_BY": "Ajay"
+    },
+    {
+      "ID": "dda8f54a-46a9-4059-8a5b-3294add69109",
+      "DAMAGE_ID": "9552ff29-29d5-496e-9fa4-626e28e67cr8",
+      "FILE_NAME": "engine_failure.jpg",
+      "MEDIA_TYPE": "image/jpeg",
+      "PHOTO_CONTENT": "/9j/4AAQSkZJRgABAQAAAQABAAD...",
+      "UPLOADED_AT": "2026-10-18T14:45:00Z",
+      "UPLOADED_BY": "Venu"
+    }
+  ]
+}

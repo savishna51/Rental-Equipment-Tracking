@@ -1,0 +1,42 @@
+.sapTntSideNavigation {
+    background: #071b34 !important;
+    min-width: 220px;
+}
+
+.sapMGT {
+    width: 200px !important;
+    height: 140px !important;
+    margin: 10px;
+}
+
+.sapMPanel {
+    border-radius: 12px;
+}
+
+#billingHealthPanel {
+    border-radius: 20px;
+}
+
+#billingChart {
+    background: white;
+}
+
+#billingSummaryVBox {
+    min-width: 250px;
+}
+
+.sapMPanel {
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+#utilizationValue {
+    font-size: 42px !important;
+    font-weight: bold !important;
+    color: #0f294d !important;
+}
+
+#utilizationGrowth {
+    color: #18a957 !important;
+    font-weight: bold;
+}
