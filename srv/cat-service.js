@@ -1,4 +1,4 @@
-const cds = require("@sap/cds-dk/lib/cds");
+const cds = require("@sap/cds");
 
 module.exports = cds.service.impl(async function () {
     const {CustomerSrv, RentalSrv, RentalItemSrv, EquipmentSrv, LocationSrv, RepairBillSrv, ConditionLogSrv, MaintenanceRecordSrv, DamageRecordSrv, DamagePhotoSrv} = this.entities;

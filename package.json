@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "@cap-js/sqlite": "^3",
+    "@sap/cds-dk": "^10",
     "cds-plugin-ui5": "^0.17.0"
   },
   "private": true,
@@ -34,7 +35,6 @@
   ],
   "sapux": [
     "app/fleet",
-    "app/fleet",
     "app/inspections",
     "app/billing",
     "app/maintenance",
@@ -42,5 +42,30 @@
     "app/rentals",
     "app/overview",
     "app/retcldashboard"
-  ]
+  ],
+  "cds": {
+    "requires": {
+      "auth": {
+        "[development]": {
+  "kind": "mocked",
+  "users": {
+    "admin": {
+      "password": "admin",
+      "roles": [
+        "YardWorker",
+        "Dispatcher",
+        "Technician",
+        "BillingClerk",
+        "Manager",
+        "Admin"
+      ]
+    }
+  }
+},
+        "[production]": {
+  "kind": "xsuaa"
+}
+      }
+    }
+  }
 }

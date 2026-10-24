@@ -1,0 +1,124 @@
+{
+  "xsappname": "retcl-30cbdad9trial-dev",
+  "tenant-mode": "dedicated",
+  "description": "Rental Equipment Tracking Authorization",
+
+  "scopes": [
+    {
+      "name": "$XSAPPNAME.YardWorker",
+      "description": "Yard Worker"
+    },
+    {
+      "name": "$XSAPPNAME.Dispatcher",
+      "description": "Dispatcher"
+    },
+    {
+      "name": "$XSAPPNAME.Technician",
+      "description": "Technician"
+    },
+    {
+      "name": "$XSAPPNAME.BillingClerk",
+      "description": "Billing Clerk"
+    },
+    {
+      "name": "$XSAPPNAME.Manager",
+      "description": "Manager"
+    },
+    {
+      "name": "$XSAPPNAME.Admin",
+      "description": "Administrator"
+    }
+  ],
+
+  "role-templates": [
+    {
+      "name": "YardWorker",
+      "description": "Yard Worker",
+      "scope-references": [
+        "$XSAPPNAME.YardWorker"
+      ]
+    },
+    {
+      "name": "Dispatcher",
+      "description": "Dispatcher",
+      "scope-references": [
+        "$XSAPPNAME.Dispatcher"
+      ]
+    },
+    {
+      "name": "Technician",
+      "description": "Technician",
+      "scope-references": [
+        "$XSAPPNAME.Technician"
+      ]
+    },
+    {
+      "name": "BillingClerk",
+      "description": "Billing Clerk",
+      "scope-references": [
+        "$XSAPPNAME.BillingClerk"
+      ]
+    },
+    {
+      "name": "Manager",
+      "description": "Manager",
+      "scope-references": [
+        "$XSAPPNAME.Manager"
+      ]
+    },
+    {
+      "name": "Admin",
+      "description": "Administrator",
+      "scope-references": [
+        "$XSAPPNAME.Admin"
+      ]
+    }
+  ],
+
+  "role-collections": [
+    {
+      "name": "RETCL_YardWorker",
+      "description": "Rental Equipment Tracking - Yard Worker",
+      "role-template-references": [
+        "$XSAPPNAME.YardWorker"
+      ]
+    },
+    {
+      "name": "RETCL_Dispatcher",
+      "description": "Rental Equipment Tracking - Dispatcher",
+      "role-template-references": [
+        "$XSAPPNAME.Dispatcher"
+      ]
+    },
+    {
+      "name": "RETCL_Technician",
+      "description": "Rental Equipment Tracking - Technician",
+      "role-template-references": [
+        "$XSAPPNAME.Technician"
+      ]
+    },
+    {
+      "name": "RETCL_BillingClerk",
+      "description": "Rental Equipment Tracking - Billing Clerk",
+      "role-template-references": [
+        "$XSAPPNAME.BillingClerk"
+      ]
+    },
+    {
+      "name": "RETCL_Manager",
+      "description": "Rental Equipment Tracking - Manager",
+      "role-template-references": [
+        "$XSAPPNAME.Manager"
+      ]
+    },
+    {
+      "name": "RETCL_Admin_v2",
+      "description": "Rental Equipment Tracking - Administrator",
+      "role-template-references": [
+        "$XSAPPNAME.Admin"
+      ]
+    }
+  ],
+
+  "attributes": []
+}

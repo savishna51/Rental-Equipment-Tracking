@@ -120,6 +120,7 @@ type createDamagePhotosIP : array of{
     UPLOADED_BY    : database.common.String100;
 }
 
+@requires: 'authenticated-user'
 service CatalogService {
     entity CustomerSrv as projection on database.Customers;
     entity RentalSrv as projection on database.Rentals;
@@ -132,15 +133,54 @@ service CatalogService {
     entity DamageRecordSrv as projection on database.DamageRecords;
     entity DamagePhotoSrv as projection on database.DamagePhotos;
 
-    action createCustomers(input : createCustomersIP) returns String;
-    action createRentals(input : createRentalsIP) returns String;
-    action createRentalItems(input : createRentalItemsIP) returns String;
-    action createEquipments(input : createEquipmentsIP) returns String;
-    action createLocations(input : createLocationsIP) returns String;
-    action createRepairBills(input : createRepairBillsIP) returns String;
-    action createConditionLogs(input : createConditionLogsIP) returns String;
-    action createMaintenanceRecords(input : createMaintenanceRecordsIP) returns String;
-    action createDamageRecords(input : createDamageRecordsIP) returns String;
-    action createDamagePhotos(input : createDamagePhotosIP) returns String;
+    @restrict: [
+    { grant: '*', to: 'Admin' }
+]
+action createCustomers(input : createCustomersIP) returns String;
+
+@restrict: [
+    { grant: '*', to: ['Dispatcher', 'Manager', 'Admin'] }
+]
+action createRentals(input : createRentalsIP) returns String;
+
+@restrict: [
+    { grant: '*', to: ['Dispatcher', 'Manager', 'Admin'] }
+]
+action createRentalItems(input : createRentalItemsIP) returns String;
+
+@restrict: [
+    { grant: '*', to: ['Technician', 'Manager', 'Admin'] }
+]
+action createEquipments(input : createEquipmentsIP) returns String;
+
+@restrict: [
+    { grant: '*', to: 'Admin' }
+]
+action createLocations(input : createLocationsIP) returns String;
+
+@restrict: [
+    { grant: '*', to: ['BillingClerk', 'Manager', 'Admin'] }
+]
+action createRepairBills(input : createRepairBillsIP) returns String;
+
+@restrict: [
+    { grant: '*', to: ['YardWorker', 'Technician', 'Dispatcher', 'Manager', 'Admin'] }
+]
+action createConditionLogs(input : createConditionLogsIP) returns String;
+
+@restrict: [
+    { grant: '*', to: ['Technician', 'Manager', 'Admin'] }
+]
+action createMaintenanceRecords(input : createMaintenanceRecordsIP) returns String;
+
+@restrict: [
+    { grant: '*', to: ['YardWorker', 'Technician', 'Dispatcher', 'Manager', 'Admin'] }
+]
+action createDamageRecords(input : createDamageRecordsIP) returns String;
+
+@restrict: [
+    { grant: '*', to: ['YardWorker', 'Technician', 'Dispatcher', 'Manager', 'Admin'] }
+]
+action createDamagePhotos(input : createDamagePhotosIP) returns String;
 
 }
