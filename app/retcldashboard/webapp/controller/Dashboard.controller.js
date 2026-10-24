@@ -1,318 +1,290 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
-    "sap/ui/model/json/JSONModel",
-    "sap/viz/ui5/data/FlattenedDataset",
-    "sap/viz/ui5/controls/common/feeds/FeedItem"
-], function (
-    Controller,
-    JSONModel,
-    FlattenedDataset,
-    FeedItem
-)  {
+    "sap/m/MessageToast",
+    "sap/base/Log",
+    "com/retcl/dashboard/retcldashboard/util/Calc",
+    "com/retcl/dashboard/retcldashboard/util/Render",
+    "com/retcl/dashboard/retcldashboard/util/DemoData"
+], function (Controller, MessageToast, Log, Calc, Render, DemoData) {
     "use strict";
 
-    return Controller.extend(
-        "com.retcl.dashboard.retcldashboard.controller.Dashboard",
-        {
+    // ------------------------------------------------------------------
+    // CONFIG - change these to suit your project
+    // ------------------------------------------------------------------
+    var CONFIG = {
+        brand: "RETCL",
+        userName: "Savishna Reddy",        // shown bottom-left and in the greeting
+        userEmail: "savishnareddy51@gmail.com",
+        userRole: "Operations manager",
+        // Shown in the location dropdown ONLY while the Locations table is empty.
+        // Once you add real Location records, those are used instead.
+        fallbackLocations: [
+            { ID: "SAMPLE-1", LOCATION_NAME: "North Yard" },
+            { ID: "SAMPLE-2", LOCATION_NAME: "West Depot" },
+            { ID: "SAMPLE-3", LOCATION_NAME: "East Hub" },
+            { ID: "SAMPLE-4", LOCATION_NAME: "South Warehouse" },
+            { ID: "SAMPLE-5", LOCATION_NAME: "Central Service Center" }
+        ],
+        // The schema has no timestamps for "bill created", so this KPI cannot be computed yet.
+        // Add `managed` (createdAt/modifiedAt) to RepairBills and compute it in Calc.js, or keep this value.
+        avgBillingMinutes: 12.63,
+        refreshMs: 120000,
+        urls: {
+            fleet: "/fleet/index.html",
+            inspections: "/inspections/index.html",
+            billing: "/com.retcl.billing.billing/index.html",
+            maintenance: "/com.retcl.maintenance.maintenance/index.html",
+            rentals: "/com.retcl.rentals.rentals/index.html"
+        }
+    };
 
-            onInit: async function () {
+    // Entity set -> properties to read (never reads the photo LargeBinary)
+    var READS = {
+        equipments: ["EquipmentSrv", "ID,LOCATION_ID,EQUIPMENT_NAME,EQUIPMENT_TYPE,SERIAL_NUMBER,PURCHASE_DATE,CURRENT_STATUS"],
+        locations: ["LocationSrv", "ID,LOCATION_NAME,CITY"],
+        rentalItems: ["RentalItemSrv", "ID,RENTAL_ID,EQUIPMENT_ID,START_DATE,END_DATE,ITEM_STATUS"],
+        conditionLogs: ["ConditionLogSrv", "ID,EQUIPMENT_ID,RENTAL_ID,INSPECTION_DATE,INSPECTION_TYPE,CONDITION_GRADE,INSPECTOR_NAME,NOTES"],
+        damages: ["DamageRecordSrv", "ID,CONDITION_ID,DAMAGE_TYPE,DAMAGE_DESCRIPTION,SEVERITY,REPAIR_ESTIMATE,DAMAGE_STATUS"],
+        photos: ["DamagePhotoSrv", "ID,DAMAGE_ID"],
+        bills: ["RepairBillSrv", "ID,DAMAGE_ID,BILL_DATE,REPAIR_AMOUNT,TOTAL_AMOUNT,BILLING_STATUS,S4_BILLING_DOCUMENT_ID"],
+        maintenance: ["MaintenanceRecordSrv", "ID,EQUIPMENT_ID,MAINTENANCE_TYPE,MAINTENANCE_DATE,STATUS"]
+    };
 
-                const oODataModel = this.getOwnerComponent().getModel();
+    return Controller.extend("com.retcl.dashboard.retcldashboard.controller.Dashboard", {
 
-//
-// Active Fleet
-//
-const aEquipments = await oODataModel
-    .bindList("/EquipmentSrv")
-    .requestContexts();
+        onInit: function () {
+            this._ui = {
+                locationId: "", periodDays: 7, query: "", urgentOnly: false,
+                brand: CONFIG.brand, userName: CONFIG.userName, userRole: CONFIG.userRole, userEmail: CONFIG.userEmail,
+                panel: "",            // "", "notif" or "profile"
+                notifRead: false
+            };
+            this._demo = new URLSearchParams(window.location.search).get("demo") === "true";
+            this._raw = null;
+            this._model = null;
+            this._boundRoot = null;
 
-let activeFleet = 0;
+            this._onKey = function (e) {
+                if (e.key === "Escape" && this._ui.panel) {
+                    this._ui.panel = "";
+                    this._paint();
+                }
+            }.bind(this);
+            document.addEventListener("keydown", this._onKey);
 
-aEquipments.forEach(ctx => {
-
-    const equipment = ctx.getObject();
-
-    if (
-        equipment.CURRENT_STATUS === "AVAILABLE" ||
-        equipment.CURRENT_STATUS === "RENTED"
-    ) {
-        activeFleet++;
-    }
-});
-
-this.byId("fleetCount")
-    .setValue(activeFleet);
-
-//
-// Active Rentals
-//
-const aRentals = await oODataModel
-    .bindList("/RentalSrv")
-    .requestContexts();
-
-let activeRentals = 0;
-
-aRentals.forEach(ctx => {
-
-    const rental = ctx.getObject();
-
-    if (
-        rental.RENTAL_STATUS === "ACTIVE"
-    ) {
-        activeRentals++;
-    }
-});
-
-this.byId("rentalCount")
-    .setValue(activeRentals);
-
-//
-// Open Inspections
-//
-const aInspections = await oODataModel
-    .bindList("/ConditionLogSrv")
-    .requestContexts();
-
-let openInspections = 0;
-
-aInspections.forEach(ctx => {
-
-    const inspection = ctx.getObject();
-
-    if (
-        inspection.CONDITION_GRADE === "POOR" ||
-        inspection.CONDITION_GRADE === "CRITICAL"
-    ) {
-        openInspections++;
-    }
-});
-
-this.byId("inspectionCount")
-    .setValue(openInspections);
-
-//
-// Open Repair Bills
-//
-const aBills = await oODataModel
-    .bindList("/RepairBillSrv")
-    .requestContexts();
-
-let openBills = 0;
-
-aBills.forEach(ctx => {
-
-    const bill = ctx.getObject();
-
-    if (
-        bill.BILLING_STATUS === "DRAFT" ||
-        bill.BILLING_STATUS === "APPROVED"
-    ) {
-        openBills++;
-    }
-});
-
-this.byId("billingCount")
-    .setValue(openBills);
-
-
-const oData = {
-    fleetData: [
-        { Day: "Mon 14", Utilization: 23 },
-        { Day: "Tue 15", Utilization: 45 },
-        { Day: "Wed 16", Utilization: 60 },
-        { Day: "Thu 17", Utilization: 74 },
-        { Day: "Fri 18", Utilization: 75 },
-        { Day: "Sat 19", Utilization: 81 },
-        { Day: "Sun 20", Utilization: 97 }
-    ]
-};
-
-const oModel = new JSONModel(oData);
-
-this.getView().setModel(oModel);
-
-const oChart = this.byId("fleetChart");
-
-const oDataset = new FlattenedDataset({
-    dimensions: [{
-        name: "Day",
-        value: "{Day}"
-    }],
-    measures: [{
-        name: "Utilization",
-        value: "{Utilization}"
-    }],
-    data: {
-        path: "/fleetData"
-    }
-});
-
-oChart.setDataset(oDataset);
-oChart.setModel(oModel);
-
-// Dimension Feed
-oChart.addFeed(
-    new FeedItem({
-        uid: "categoryAxis",
-        type: "Dimension",
-        values: ["Day"]
-    })
-);
-
-// Measure Feed
-oChart.addFeed(
-    new FeedItem({
-        uid: "valueAxis",
-        type: "Measure",
-        values: ["Utilization"]
-    })
-);
-
-oChart.setVizProperties({
-
-    title: {
-        visible: false
-    },
-
-    legend: {
-        visible: false
-    },
-
-    valueAxis: {
-        title: {
-            visible: false
+            this._timer = window.setInterval(function () { this._load(true); }.bind(this), CONFIG.refreshMs);
         },
-        label: {
-            formatString: "#'%'"
-        }
-    },
 
-    categoryAxis: {
-        title: {
-            visible: false
-        }
-    },
-
-    plotArea: {
-        colorPalette: ["#356AE6"],
-        dataLabel: {
-            visible: false
-        }
-    }
-
-});
-
-    const oBillingData = {
-    Billing: [
-        {
-            Status: "Posted",
-            Amount: 84600
+        onExit: function () {
+            document.removeEventListener("keydown", this._onKey);
+            window.clearInterval(this._timer);
         },
-        {
-            Status: "Pending",
-            Amount: 4640
-        }
-    ]
-};
 
-const oBillingModel =
-    new JSONModel(oBillingData);
+        // Called every time the sap.ui.core.HTML control (re)renders its DOM
+        onAfterRenderingHtml: function () {
+            var root = this.byId("flHtml").getDomRef();
+            if (!root) { return; }
+            this._root = root;
+            if (this._boundRoot !== root) {
+                this._bind(root);
+                this._boundRoot = root;
+            }
+            if (this._model) {
+                this._paint();
+            } else {
+                root.innerHTML = Render.skeleton();
+                if (!this._loading) { this._load(false); }
+            }
+        },
 
-this.getView().setModel(
-    oBillingModel,
-    "billing"
-);
+        // ---------------------------------------------------------------- data
+        _read: function (key) {
+            var model = this.getOwnerComponent().getModel();
+            var def = READS[key];
+            return model.bindList("/" + def[0], null, [], [], { $select: def[1] })
+                .requestContexts(0, 5000)
+                .then(function (ctxs) { return ctxs.map(function (c) { return c.getObject(); }); })
+                .catch(function (err) {
+                    Log.error("Dashboard: reading " + def[0] + " failed", err && err.message);
+                    this._failed.push(def[0]);
+                    return [];
+                }.bind(this));
+        },
 
-const oBillingChart =
-    this.byId("billingChart");
+        _load: function (silent) {
+            if (this._loading) { return; }
+            this._loading = true;
+            this._failed = [];
 
-const oBillingDataset =
-    new FlattenedDataset({
+            var done = function (raw) {
+                this._raw = raw;
+                this._loading = false;
+                this._compute();
+                this._paint();
+                if (!silent) {
+                    if (this._failed.length) {
+                        MessageToast.show("Could not read: " + this._failed.join(", "));
+                    } else if (!this._demo && !raw.equipments.length && !raw.conditionLogs.length) {
+                        MessageToast.show("No data found yet. Add ?demo=true to the URL to preview sample data.");
+                    }
+                }
+            }.bind(this);
 
-        dimensions: [{
-            name: "Status",
-            value: "{billing>Status}"
-        }],
-
-        measures: [{
-            name: "Amount",
-            value: "{billing>Amount}"
-        }],
-
-        data: {
-            path: "billing>/Billing"
-        }
-
-    });
-
-oBillingChart.setDataset(
-    oBillingDataset
-);
-
-oBillingChart.setModel(
-    oBillingModel,
-    "billing"
-);
-
-oBillingChart.addFeed(
-    new FeedItem({
-        uid: "color",
-        type: "Dimension",
-        values: ["Status"]
-    })
-);
-
-oBillingChart.addFeed(
-    new FeedItem({
-        uid: "size",
-        type: "Measure",
-        values: ["Amount"]
-    })
-);
-oBillingChart.setVizProperties({
-    title: {
-        visible: false
-    },
-    legend: {
-        visible: false
-    },
-    plotArea: {
-        colorPalette: [
-            "#38B878",
-            "#F4A63E"
-        ]
-    }
-});
-},
-
-            onFleetPress: function () {
-                window.open(
-                    "/fleet/index.html",
-                    "_blank"
-                );
-            },
-
-            onInspectionPress: function () {
-                window.open(
-                    "/inspections/index.html",
-                    "_blank"
-                );
-            },
-
-            onRentalPress: function () {
-                window.open(
-                    "/com.retcl.rentals.rentals/index.html",
-                    "_blank"
-                );
-            },
-
-            onBillingPress: function () {
-                window.open(
-                    "/com.retcl.billing.billing/index.html",
-                    "_blank"
-                );
+            if (this._demo) {
+                done(DemoData.build());
+                return;
             }
 
+            var keys = Object.keys(READS);
+            Promise.all(keys.map(this._read, this)).then(function (results) {
+                var raw = {};
+                keys.forEach(function (k, i) { raw[k] = results[i]; });
+                done(raw);
+            });
+        },
+
+        _compute: function () {
+            if (!this._raw) { return; }
+            this._model = Calc.build(this._raw, {
+                locationId: this._ui.locationId,
+                periodDays: this._ui.periodDays,
+                avgBillingMinutes: CONFIG.avgBillingMinutes,
+                fallbackLocations: CONFIG.fallbackLocations
+            });
+        },
+
+        // ---------------------------------------------------------------- paint
+        _paint: function () {
+            if (!this._root || !this._model) { return; }
+            var active = document.activeElement;
+            var hadFocus = active && active.id === "flSearch";
+            var selStart = hadFocus ? active.selectionStart : 0;
+
+            this._model.now = new Date();
+            this._root.innerHTML = Render.page(this._model, this._ui);
+            Render.bindChart(this._root);
+
+            if (hadFocus) {
+                var el = this._root.querySelector("#flSearch");
+                if (el) { el.focus(); el.setSelectionRange(selStart, selStart); }
+            }
+        },
+
+        _paintQueue: function () {
+            var body = this._root && this._root.querySelector("#flQueueBody");
+            if (body) { body.innerHTML = Render.queueRows(this._model, this._ui); }
+            var btn = this._root && this._root.querySelector('[data-action="filter"]');
+            if (btn) { btn.classList.toggle("is-on", this._ui.urgentOnly); }
+        },
+
+        // ---------------------------------------------------------------- events
+        _bind: function (root) {
+            var that = this;
+
+            root.addEventListener("click", function (e) {
+                var el = e.target.closest("[data-action]");
+                if (!el || !root.contains(el)) { return; }
+                that._action(el.getAttribute("data-action"), el);
+            });
+
+            root.addEventListener("keydown", function (e) {
+                if (e.key !== "Enter" && e.key !== " ") { return; }
+                var el = e.target.closest('[role="button"][data-action]');
+                if (el) { e.preventDefault(); that._action(el.getAttribute("data-action"), el); }
+            });
+
+            root.addEventListener("change", function (e) {
+                if (e.target.id === "flLocation") {
+                    that._ui.locationId = e.target.value;
+                    that._compute();
+                    that._paint();
+                }
+            });
+
+            root.addEventListener("input", function (e) {
+                if (e.target.id === "flSearch") {
+                    that._ui.query = e.target.value.trim();
+                    that._paintQueue();
+                }
+            });
+        },
+
+        _open: function (key) {
+            var url = CONFIG.urls[key];
+            if (url) { window.open(url, "_blank"); }
+        },
+
+        _action: function (action, el) {
+            switch (action) {
+                case "nav": {
+                    var target = el.getAttribute("data-target");
+                    if (target === "analytics") { MessageToast.show("Analytics is not available yet."); }
+                    else if (target !== "overview") { this._open(target); }
+                    break;
+                }
+                case "period":
+                    this._ui.periodDays = parseInt(el.getAttribute("data-days"), 10);
+                    this._compute();
+                    this._paint();
+                    break;
+                case "goto-queue": {
+                    var q = this._root.querySelector("#flQueue");
+                    if (q) { q.scrollIntoView({ behavior: "smooth", block: "start" }); }
+                    break;
+                }
+                case "filter":
+                    this._ui.urgentOnly = !this._ui.urgentOnly;
+                    this._paintQueue();
+                    MessageToast.show(this._ui.urgentOnly ? "Showing urgent inspections only" : "Showing all pending inspections");
+                    break;
+                case "export":
+                    this._exportCsv();
+                    break;
+                case "notifications":
+                    this._ui.panel = this._ui.panel === "notif" ? "" : "notif";
+                    this._paint();
+                    break;
+                case "profile":
+                    this._ui.panel = "profile";
+                    this._paint();
+                    break;
+                case "close-panel":
+                    this._ui.panel = "";
+                    this._paint();
+                    break;
+                case "mark-read":
+                    this._ui.notifRead = true;
+                    this._paint();
+                    break;
+                case "notif-go":
+                    this._ui.panel = "";
+                    this._paint();
+                    this._open(el.getAttribute("data-target"));
+                    break;
+                case "new-inspection":
+                case "open-inspection":
+                    this._open("inspections");
+                    break;
+                default:
+                    break;
+            }
+        },
+
+        _exportCsv: function () {
+            var rows = (this._model && this._model.queue) || [];
+            var cell = function (v) { return '"' + String(v === null || v === undefined ? "" : v).replace(/"/g, '""') + '"'; };
+            var lines = [["Asset", "Code", "Location", "Damage report", "Photos", "Condition", "Urgent", "Est. charge"].map(cell).join(",")];
+            rows.forEach(function (r) {
+                lines.push([r.name, r.code, r.location, r.title, r.photos, r.grade, r.urgent ? "Yes" : "No", r.estimate].map(cell).join(","));
+            });
+            var blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8" });
+            var a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = "inspection-queue.csv";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(a.href);
         }
-    );
+    });
 });
