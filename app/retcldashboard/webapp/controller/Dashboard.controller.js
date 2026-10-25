@@ -256,6 +256,10 @@ sap.ui.define([
                     this._ui.panel = "profile";
                     this._paint();
                     break;
+
+                case "logout":
+                    window.location.href = "/do/logout";
+                    break;
                 case "close-panel":
                     this._ui.panel = "";
                     this._paint();

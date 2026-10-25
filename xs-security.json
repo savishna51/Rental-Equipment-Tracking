@@ -120,5 +120,11 @@
     }
   ],
 
+    "oauth2-configuration": {
+    "redirect-uris": [
+      "https://30cbdad9trial-dev-retcl-router.cfapps.us10-001.hana.ondemand.com/login/callback"
+    ]
+  },
+
   "attributes": []
 }

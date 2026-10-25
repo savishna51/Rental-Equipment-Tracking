@@ -1,0 +1,16 @@
+<mvc:View
+    controllerName="com.retcl.dashboard.retcldashboard.controller.Dashboard"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    height="100%">
+
+    <Page id="dashboardPage" showHeader="false" enableScrolling="false" class="flPage">
+        <content>
+            <core:HTML id="flHtml"
+                content="&lt;div class=&quot;fl-app&quot;&gt;&lt;/div&gt;"
+                afterRendering=".onAfterRenderingHtml" />
+        </content>
+    </Page>
+
+</mvc:View>

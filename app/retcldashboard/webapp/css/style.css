@@ -361,3 +361,13 @@
 .fl-profile dd { font-weight: 600; text-align: right; word-break: break-all; }
 .fl-profile dl > :nth-last-child(-n+2) { border-bottom: 0; }
 .fl-profile__actions { padding: 14px 24px 22px; text-align: right; }
+
+.fl-btn--danger {
+    color: #b42318;
+    border-color: #f3b5b0;
+}
+
+.fl-btn--danger:hover {
+    background: #fff1f0;
+    border-color: #d92d20;
+}

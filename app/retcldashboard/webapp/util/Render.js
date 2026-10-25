@@ -222,16 +222,54 @@ sap.ui.define([], function () {
     }
 
     function profilePanel(m, cfg) {
-        var initials = cfg.userName.split(/\s+/).map(function (p) { return p.charAt(0); }).join("").slice(0, 2).toUpperCase();
-        function row(k, v) { return "<dt>" + k + "</dt><dd>" + esc(v) + "</dd>"; }
-        return '<div class="fl-backdrop fl-backdrop--dim" data-action="close-panel"></div>' +
-            '<section class="fl-profile" role="dialog" aria-label="My profile">' +
-            '<button class="fl-profile__x" data-action="close-panel" aria-label="Close">' + ico("close", 18) + "</button>" +
-            '<div class="fl-profile__hero"><span class="fl-avatar fl-avatar--lg">' + esc(initials) + "</span>" +
-            "<h3>" + esc(cfg.userName) + "</h3><p>" + esc(cfg.userRole) + "</p></div>" +
-            "<dl>" + row("Email", cfg.userEmail) + row("Role", cfg.userRole) + row("Organization", cfg.brand) + row("Location access", "All locations") + "</dl>" +
-            '<div class="fl-profile__actions"><button class="fl-btn" data-action="close-panel">Close</button></div></section>';
+    var initials = cfg.userName.split(/\s+/)
+        .map(function (p) {
+            return p.charAt(0);
+        })
+        .join("")
+        .slice(0, 2)
+        .toUpperCase();
+
+    function row(k, v) {
+        return "<dt>" + k + "</dt><dd>" + esc(v) + "</dd>";
     }
+
+    return '<div class="fl-backdrop fl-backdrop--dim" data-action="close-panel"></div>' +
+        '<section class="fl-profile" role="dialog" aria-label="My profile">' +
+
+        '<button class="fl-profile__x" data-action="close-panel" aria-label="Close">' +
+        ico("close", 18) +
+        "</button>" +
+
+        '<div class="fl-profile__hero">' +
+        '<span class="fl-avatar fl-avatar--lg">' +
+        esc(initials) +
+        "</span>" +
+
+        "<h3>" + esc(cfg.userName) + "</h3>" +
+        "<p>" + esc(cfg.userRole) + "</p>" +
+
+        "</div>" +
+
+        "<dl>" +
+        row("Email", cfg.userEmail) +
+        row("Role", cfg.userRole) +
+        row("Organization", cfg.brand) +
+        row("Location access", "All locations") +
+        "</dl>" +
+
+        '<div class="fl-profile__actions">' +
+
+        '<button class="fl-btn" data-action="close-panel">' +
+        "Close" +
+        "</button>" +
+
+        '<button class="fl-btn fl-btn--danger" data-action="logout">' +
+        "Logout" +
+        "</button>" +
+
+        "</div></section>";
+}
 
     function header(m, cfg) {
         var opts = '<option value="">All locations</option>' + m.locations.map(function (l) {
