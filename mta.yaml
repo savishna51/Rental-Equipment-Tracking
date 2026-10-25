@@ -12,9 +12,30 @@ build-parameters:
       commands:
         - npm ci
         - npx cds build --production
+        - rm -rf app/router/public/com.retcl.billing.billing
+        - cp -r app/billing/webapp app/router/public/com.retcl.billing.billing
 
 modules:
 
+  # ============================================================
+  # APPLICATION ROUTER
+  # ============================================================
+  - name: retcl-router
+    type: approuter.nodejs
+    path: app/router
+
+    parameters:
+      memory: 128M
+      disk-quota: 256M
+
+    requires:
+      - name: retcl-auth
+      - name: srv-api
+        group: destinations
+        properties:
+          name: srv-api
+          url: ~{srv-url}
+          forwardAuthToken: true
   # ============================================================
   # CAP SERVICE
   # ============================================================
