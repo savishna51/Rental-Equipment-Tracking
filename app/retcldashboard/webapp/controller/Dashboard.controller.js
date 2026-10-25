@@ -105,8 +105,16 @@ sap.ui.define([
                 .requestContexts(0, 5000)
                 .then(function (ctxs) { return ctxs.map(function (c) { return c.getObject(); }); })
                 .catch(function (err) {
-                    Log.error("Dashboard: reading " + def[0] + " failed", err && err.message);
-                    this._failed.push(def[0]);
+                    // 401/403 = the logged-in role is not allowed to read this entity (e.g. YardWorker and repair bills).
+                    // That is expected, so the matching KPIs simply stay empty and no error is shown.
+                    var msg = String(err && err.message || "");
+                    var denied = err && (err.status === 403 || err.status === 401 || /\b(403|401)\b|forbidden|unauthori[sz]ed/i.test(msg));
+                    if (denied) {
+                        Log.info("Dashboard: no permission to read " + def[0]);
+                    } else {
+                        Log.error("Dashboard: reading " + def[0] + " failed", msg);
+                        this._failed.push(def[0]);
+                    }
                     return [];
                 }.bind(this));
         },

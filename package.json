@@ -47,24 +47,60 @@
     "requires": {
       "auth": {
         "[development]": {
-  "kind": "mocked",
-  "users": {
-    "admin": {
-      "password": "admin",
-      "roles": [
-        "YardWorker",
-        "Dispatcher",
-        "Technician",
-        "BillingClerk",
-        "Manager",
-        "Admin"
-      ]
-    }
-  }
-},
+          "kind": "mocked",
+          "users": {
+            "admin": {
+              "password": "admin",
+              "roles": [
+                "YardWorker",
+                "Dispatcher",
+                "Technician",
+                "BillingClerk",
+                "Manager",
+                "Admin"
+              ]
+            },
+            "yardworker": {
+              "password": "yardworker",
+              "roles": [
+                "YardWorker"
+              ]
+            },
+            "dispatcher": {
+              "password": "dispatcher",
+              "roles": [
+                "Dispatcher"
+              ]
+            },
+            "technician": {
+              "password": "technician",
+              "roles": [
+                "Technician"
+              ]
+            },
+            "billingclerk": {
+              "password": "billingclerk",
+              "roles": [
+                "BillingClerk"
+              ]
+            },
+            "manager": {
+              "password": "manager",
+              "roles": [
+                "Manager"
+              ]
+            },
+            "adminonly": {
+              "password": "adminonly",
+              "roles": [
+                "Admin"
+              ]
+            }
+          }
+        },
         "[production]": {
-  "kind": "xsuaa"
-}
+          "kind": "xsuaa"
+        }
       }
     }
   }

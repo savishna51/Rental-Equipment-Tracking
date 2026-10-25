@@ -1,3 +1,16 @@
+/*
+ * RETCL authorization - the six roles from the FRD (Auditor is intentionally not used)
+ *
+ *   YardWorker    scan, inspect, transfer
+ *   Dispatcher    check-out, override with reason
+ *   Technician    repairs, release quarantine
+ *   BillingClerk  approve and dispute charges
+ *   Manager       all approvals, dashboards, overrides
+ *   Admin         configuration, master data, full access
+ *
+ * Repair bills (prices) stay hidden from YardWorker, Dispatcher and Technician.
+ */
+
 using CatalogService from './cat-service';
 
 annotate CatalogService.CustomerSrv with @restrict: [
@@ -41,6 +54,10 @@ annotate CatalogService.EquipmentSrv with @restrict: [
     {
         grant: ['CREATE', 'UPDATE', 'DELETE'],
         to: ['Dispatcher', 'Technician', 'Manager', 'Admin']
+    },
+    {
+        grant: ['UPDATE'],
+        to: ['YardWorker']
     }
 ];
 
@@ -58,7 +75,7 @@ annotate CatalogService.LocationSrv with @restrict: [
 annotate CatalogService.ConditionLogSrv with @restrict: [
     {
         grant: ['READ'],
-        to: ['YardWorker', 'Dispatcher', 'Technician', 'Manager', 'Admin']
+        to: ['YardWorker', 'Dispatcher', 'Technician', 'BillingClerk', 'Manager', 'Admin']
     },
     {
         grant: ['CREATE'],
@@ -96,7 +113,7 @@ annotate CatalogService.DamageRecordSrv with @restrict: [
 annotate CatalogService.DamagePhotoSrv with @restrict: [
     {
         grant: ['READ'],
-        to: ['YardWorker', 'Dispatcher', 'Technician', 'Manager', 'Admin']
+        to: ['YardWorker', 'Dispatcher', 'Technician', 'BillingClerk', 'Manager', 'Admin']
     },
     {
         grant: ['CREATE'],
@@ -111,7 +128,7 @@ annotate CatalogService.DamagePhotoSrv with @restrict: [
 annotate CatalogService.MaintenanceRecordSrv with @restrict: [
     {
         grant: ['READ'],
-        to: ['Technician', 'Dispatcher', 'Manager', 'Admin']
+        to: ['YardWorker', 'Dispatcher', 'Technician', 'BillingClerk', 'Manager', 'Admin']
     },
     {
         grant: ['CREATE', 'UPDATE'],
@@ -144,11 +161,11 @@ annotate CatalogService.RepairBillSrv with @restrict: [
 
 annotate CatalogService.createCustomers with @requires: 'Admin';
 
-annotate CatalogService.createRentals with @requires: 'Dispatcher';
+annotate CatalogService.createRentals with @requires: ['Dispatcher', 'Manager', 'Admin'];
 
-annotate CatalogService.createRentalItems with @requires: 'Dispatcher';
+annotate CatalogService.createRentalItems with @requires: ['Dispatcher', 'Manager', 'Admin'];
 
-annotate CatalogService.createEquipments with @requires: ['Technician', 'Admin'];
+annotate CatalogService.createEquipments with @requires: ['Technician', 'Manager', 'Admin'];
 
 annotate CatalogService.createLocations with @requires: 'Admin';
 
