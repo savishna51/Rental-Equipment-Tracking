@@ -1,11 +1,7 @@
 {
-  "welcomeFile": "/index.html",
+  "welcomeFile": "index.html",
   "authenticationMethod": "route",
 
-  "logout": {
-    "logoutEndpoint": "/do/logout",
-    "logoutPage": "/"
-  },
   "routes": [
     {
       "source": "^/odata/(.*)$",
