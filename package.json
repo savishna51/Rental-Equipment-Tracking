@@ -22,7 +22,8 @@
     "@cap-js/hana": "^3.1.2",
     "@sap/cds": "^10",
     "@sap/cds-dk": "^10.1.0",
-    "@sap/xssec": "^4.15.0"
+    "@sap/xssec": "^4.15.0",
+    "express-session": "^1.19.0"
   },
   "devDependencies": {
     "@cap-js/sqlite": "^3",
@@ -47,7 +48,7 @@
     "requires": {
       "auth": {
         "[development]": {
-          "kind": "mocked",
+          "kind": "custom",
           "users": {
             "admin": {
               "password": "admin",
@@ -96,7 +97,8 @@
                 "Admin"
               ]
             }
-          }
+          },
+          "impl": "./srv/session-auth.js"
         },
         "[production]": {
           "kind": "xsuaa"

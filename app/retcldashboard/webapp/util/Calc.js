@@ -3,11 +3,9 @@ sap.ui.define([], function () {
 
     var DAY = 86400000;
 
-    // Item statuses that mean "the machine was out on rent"
     var OUT = { RENTED: true, RETURNED: true, DAMAGED: true };
     var POSTED = { POSTED_TO_S4: true, PAID: true };
     var PENDING = { DRAFT: true, APPROVED: true };
-    // A return needs review when it is graded FAIR or worse, or has a reported (unreviewed) damage
     var NEEDS_REVIEW = { FAIR: true, POOR: true, CRITICAL: true };
     var GRADE_LETTER = { EXCELLENT: "A", GOOD: "B", FAIR: "C", POOR: "D", CRITICAL: "D" };
 
@@ -63,11 +61,6 @@ sap.ui.define([], function () {
         return m;
     }
 
-    /**
-     * Turns raw OData rows into everything the dashboard shows.
-     * raw  = { equipments, locations, rentalItems, conditionLogs, damages, photos, bills, maintenance }
-     * opts = { locationId, periodDays, now, avgBillingMinutes }
-     */
     function build(raw, opts) {
         opts = opts || {};
         var now = opts.now || new Date();
@@ -86,7 +79,6 @@ sap.ui.define([], function () {
         function eqCode(e) { return e ? (e.SERIAL_NUMBER || ("EQ-" + String(e.ID).slice(0, 4).toUpperCase())) : "-"; }
         function eqLoc(e) { var l = e && locById[e.LOCATION_ID]; return l ? l.LOCATION_NAME : ""; }
 
-        // ---------- Fleet ----------
         var active = equip.filter(function (e) { return e.CURRENT_STATUS !== "RETIRED"; });
         var activeCount = active.length;
         var rentedNow = active.filter(function (e) { return e.CURRENT_STATUS === "RENTED"; }).length;
@@ -97,14 +89,12 @@ sap.ui.define([], function () {
         }).length;
         var growth = (activeCount - newEq) > 0 ? newEq / (activeCount - newEq) * 100 : 0;
 
-        // ---------- Utilization ----------
         var items = (raw.rentalItems || []).filter(function (r) { return inScope(r.EQUIPMENT_ID); });
         var denom = activeCount || equip.length;
         var cur = series(items, denom, today, periodDays, 0);
         var prev = series(items, denom, today, periodDays, periodDays);
         var bars = series(items, denom, today, 14, 0).map(function (p) { return p.value; });
 
-        // ---------- Inspections ----------
         var dmgById = index(raw.damages || [], "ID");
         var condById = index(raw.conditionLogs || [], "ID");
         var damagesByCond = {};
@@ -146,7 +136,6 @@ sap.ui.define([], function () {
         var urgent = queue.filter(function (q) { return q.urgent; }).length;
         var waiting = queue.filter(function (q) { return q.when && (now - q.when) > 2 * 3600000; }).length;
 
-        // ---------- Billing ----------
         function billEq(b) {
             var d = dmgById[b.DAMAGE_ID];
             var c = d && condById[d.CONDITION_ID];
@@ -220,12 +209,10 @@ sap.ui.define([], function () {
         });
         feed = feed.filter(function (f) { return f.at; }).sort(function (a, b) { return b.at - a.at; }).slice(0, 4);
 
-        // ---------- Location coverage (always network wide) ----------
         var withLoc = equipAll.filter(function (e) { return e.LOCATION_ID && locById[e.LOCATION_ID]; }).length;
         var flags = equipAll.length - withLoc;
         var coverage = equipAll.length ? withLoc / equipAll.length * 100 : 100;
 
-        // ---------- Notifications ----------
         var notifications = [];
         var plural = function (n, one, many) { return n + " " + (n === 1 ? one : many); };
         if (urgent) {

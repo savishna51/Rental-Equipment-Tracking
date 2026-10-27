@@ -8,16 +8,12 @@ sap.ui.define([
 ], function (Controller, MessageToast, Log, Calc, Render, DemoData) {
     "use strict";
 
-    // ------------------------------------------------------------------
-    // CONFIG - change these to suit your project
-    // ------------------------------------------------------------------
     var CONFIG = {
         brand: "RETCL",
         userName: "Savishna Reddy",        // shown bottom-left and in the greeting
         userEmail: "savishnareddy51@gmail.com",
         userRole: "Operations manager",
-        // Shown in the location dropdown ONLY while the Locations table is empty.
-        // Once you add real Location records, those are used instead.
+
         fallbackLocations: [
             { ID: "SAMPLE-1", LOCATION_NAME: "North Yard" },
             { ID: "SAMPLE-2", LOCATION_NAME: "West Depot" },
@@ -25,8 +21,7 @@ sap.ui.define([
             { ID: "SAMPLE-4", LOCATION_NAME: "South Warehouse" },
             { ID: "SAMPLE-5", LOCATION_NAME: "Central Service Center" }
         ],
-        // The schema has no timestamps for "bill created", so this KPI cannot be computed yet.
-        // Add `managed` (createdAt/modifiedAt) to RepairBills and compute it in Calc.js, or keep this value.
+     
         avgBillingMinutes: 12.63,
         refreshMs: 120000,
         urls: {
@@ -38,7 +33,6 @@ sap.ui.define([
         }
     };
 
-    // Entity set -> properties to read (never reads the photo LargeBinary)
     var READS = {
         equipments: ["EquipmentSrv", "ID,LOCATION_ID,EQUIPMENT_NAME,EQUIPMENT_TYPE,SERIAL_NUMBER,PURCHASE_DATE,CURRENT_STATUS"],
         locations: ["LocationSrv", "ID,LOCATION_NAME,CITY"],
@@ -80,7 +74,6 @@ sap.ui.define([
             window.clearInterval(this._timer);
         },
 
-        // Called every time the sap.ui.core.HTML control (re)renders its DOM
         onAfterRenderingHtml: function () {
             var root = this.byId("flHtml").getDomRef();
             if (!root) { return; }
@@ -97,7 +90,6 @@ sap.ui.define([
             }
         },
 
-        // ---------------------------------------------------------------- data
         _read: function (key) {
             var model = this.getOwnerComponent().getModel();
             var def = READS[key];
@@ -105,8 +97,6 @@ sap.ui.define([
                 .requestContexts(0, 5000)
                 .then(function (ctxs) { return ctxs.map(function (c) { return c.getObject(); }); })
                 .catch(function (err) {
-                    // 401/403 = the logged-in role is not allowed to read this entity (e.g. YardWorker and repair bills).
-                    // That is expected, so the matching KPIs simply stay empty and no error is shown.
                     var msg = String(err && err.message || "");
                     var denied = err && (err.status === 403 || err.status === 401 || /\b(403|401)\b|forbidden|unauthori[sz]ed/i.test(msg));
                     if (denied) {
@@ -161,7 +151,6 @@ sap.ui.define([
             });
         },
 
-        // ---------------------------------------------------------------- paint
         _paint: function () {
             if (!this._root || !this._model) { return; }
             var active = document.activeElement;
@@ -185,7 +174,6 @@ sap.ui.define([
             if (btn) { btn.classList.toggle("is-on", this._ui.urgentOnly); }
         },
 
-        // ---------------------------------------------------------------- events
         _bind: function (root) {
             var that = this;
 
