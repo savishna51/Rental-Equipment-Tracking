@@ -10,7 +10,7 @@ sap.ui.define([
 
     var CONFIG = {
         brand: "RETCL",
-        userName: "Savishna Reddy",        // shown bottom-left and in the greeting
+        userName: "Savishna Reddy",       
         userEmail: "savishnareddy51@gmail.com",
         userRole: "Operations manager",
 
@@ -50,7 +50,7 @@ sap.ui.define([
             this._ui = {
                 locationId: "", periodDays: 7, query: "", urgentOnly: false,
                 brand: CONFIG.brand, userName: CONFIG.userName, userRole: CONFIG.userRole, userEmail: CONFIG.userEmail,
-                panel: "",            // "", "notif" or "profile"
+                panel: "",            
                 notifRead: false
             };
             this._demo = new URLSearchParams(window.location.search).get("demo") === "true";

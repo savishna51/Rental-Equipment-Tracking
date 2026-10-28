@@ -1,7 +1,6 @@
 sap.ui.define([], function () {
     "use strict";
 
-    // Deterministic pseudo random so the demo looks the same on every reload
     var seed = 7;
     function rnd() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
 

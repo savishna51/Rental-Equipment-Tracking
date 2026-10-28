@@ -175,7 +175,6 @@ sap.ui.define([], function () {
         }
         var openBills = bills.filter(function (b) { return PENDING[b.BILLING_STATUS]; }).length;
 
-        // ---------- Activity feed ----------
         var feed = [];
         bills.forEach(function (b) {
             if (POSTED[b.BILLING_STATUS]) {

@@ -39,7 +39,6 @@
 .fl-app [hidden] { display: none !important; }
 .fl-grow { flex: 1; }
 
-/* ------------------------------------------------------------ sidebar */
 .fl-side {
     display: flex; flex-direction: column;
     padding: 22px 22px 0;
@@ -97,7 +96,6 @@
     display: grid; place-items: center; font-weight: 700; font-size: 15px;
 }
 
-/* ------------------------------------------------------------ main + top bar */
 .fl-main { min-width: 0; overflow-y: auto; scroll-behavior: smooth; }
 
 .fl-top {
@@ -120,7 +118,6 @@
 
 .fl-content { padding: 40px 44px 56px; max-width: 1640px; }
 
-/* ------------------------------------------------------------ heading */
 .fl-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; margin-bottom: 30px; }
 .fl-eyebrow { color: var(--orange); font-size: 12px; font-weight: 700; letter-spacing: .18em; margin-bottom: 14px; }
 .fl-head h1 { font-size: 46px; line-height: 1.05; font-weight: 700; letter-spacing: -.035em; }
@@ -148,7 +145,6 @@
 }
 .fl-btn--primary:hover { background: #d95a22; }
 
-/* ------------------------------------------------------------ cards + KPIs */
 .fl-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: 0 1px 2px rgba(15, 28, 46, .04); }
 
 .fl-kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; margin-bottom: 18px; }
@@ -185,7 +181,6 @@
 .fl-link:hover { text-decoration: underline; }
 .fl-link--orange { color: var(--orange); }
 
-/* ------------------------------------------------------------ rows */
 .fl-row { display: grid; gap: 18px; margin-bottom: 18px; align-items: stretch; }
 .fl-row--a, .fl-row--b { grid-template-columns: minmax(0, 2.15fr) minmax(0, 1fr); }
 
@@ -199,7 +194,6 @@
 .fl-seg__b { border: 0; background: transparent; padding: 7px 14px; border-radius: 7px; font-size: 12px; color: var(--muted); cursor: pointer; }
 .fl-seg__b.is-on { background: #fff; color: var(--ink); font-weight: 600; box-shadow: 0 1px 3px rgba(15, 28, 46, .12); }
 
-/* utilization */
 .fl-util { padding-bottom: 22px; }
 .fl-util__big { padding: 22px 28px 0 56px; font-size: 12px; color: var(--muted); }
 .fl-util__big b { font-size: 34px; font-weight: 700; letter-spacing: -.03em; color: var(--ink); margin-right: 8px; }
@@ -218,7 +212,6 @@
 .fl-tip b { display: block; font-size: 13px; }
 .fl-tip span { font-size: 10px; color: #aeb9c9; }
 
-/* billing */
 .fl-bill { display: flex; flex-direction: column; }
 .fl-bill__body { display: flex; align-items: center; justify-content: center; gap: 34px; flex: 1; padding: 20px 28px; flex-wrap: wrap; }
 .fl-donut { position: relative; width: 190px; height: 190px; }
@@ -236,7 +229,6 @@
 .dot--green { background: #5db87d; }
 .dot--amber { background: var(--amber); }
 
-/* queue */
 .fl-queue { display: flex; flex-direction: column; padding-bottom: 6px; }
 .fl-queue__tools { display: flex; gap: 10px; }
 .fl-qhead, .fl-qrow {
@@ -259,7 +251,6 @@
 .fl-queue__more { padding: 22px 0 18px; text-align: center; }
 .fl-empty { padding: 36px 28px; text-align: center; color: var(--muted); font-size: 13px; }
 
-/* right column */
 .fl-stack { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
 .fl-act { padding-bottom: 26px; flex: 1; }
 .fl-pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 99px; background: var(--green-soft); color: #23824f; font-size: 11px; font-weight: 600; }
@@ -290,12 +281,10 @@
 .fl-ring b { font-size: 20px; line-height: 1; }
 .fl-ring small { font-size: 9px; color: #9fb0cb; margin-top: 2px; }
 
-/* loading */
 .fl-loading { grid-column: 1 / -1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; height: 100%; color: var(--muted); }
 .fl-spinner { width: 34px; height: 34px; border-radius: 50%; border: 3px solid #e1dfd9; border-top-color: var(--orange); animation: flspin .8s linear infinite; }
 @keyframes flspin { to { transform: rotate(360deg); } }
 
-/* ------------------------------------------------------------ responsive */
 @media (max-width: 1280px) {
     .fl-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .fl-row--a, .fl-row--b { grid-template-columns: minmax(0, 1fr); }
@@ -311,7 +300,6 @@
     .fl-qrow > :nth-child(2), .fl-qrow > :nth-child(5) { display: none; }
 }
 
-/* ------------------------------------------------------------ bell, notifications, profile */
 .fl-bell.is-open { border-color: var(--orange); box-shadow: 0 0 0 3px rgba(232, 103, 47, .15); }
 .fl-bell:hover { background: #faf9f7; }
 

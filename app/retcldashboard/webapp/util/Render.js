@@ -288,23 +288,23 @@ sap.ui.define([], function () {
         var pctBar = Math.min(100, b.minutes / Math.max(b.target, 1) * 100);
         var inside = b.minutes <= b.target;
         return '<section class="fl-kpis">' +
-            // Active fleet
+      
             '<article class="fl-card fl-kpi" data-action="nav" data-target="fleet"><div class="fl-kpi__top"><span class="fl-ico fl-ico--blue">' + ico("truck", 20) + "</span>" +
             chip("green", "up", pct(f.growth)) + "</div>" +
             '<div class="fl-kpi__label">Active fleet</div><div class="fl-kpi__value">' + f.count.toLocaleString("en-US") + "</div>" +
             '<div class="fl-kpi__foot"><span><b>' + Math.round(f.utilNow) + "%</b> currently utilized</span>" + barsSpark(f.bars) + "</div></article>" +
-            // Pending inspections
+          
             '<article class="fl-card fl-kpi fl-kpi--alert"><div class="fl-kpi__top"><span class="fl-ico fl-ico--orange">' + ico("clipboard", 20) + "</span>" +
             (p.urgent ? chip("orange", "", p.urgent + " urgent") : "") + "</div>" +
             '<div class="fl-kpi__label">Pending inspections</div><div class="fl-kpi__value">' + p.count + "</div>" +
             '<div class="fl-kpi__foot"><span><b>' + p.waiting + "</b> waiting over 2 hours</span>" +
             '<a class="fl-link fl-link--orange" data-action="goto-queue">Review queue ' + ico("arrow", 14) + "</a></div></article>" +
-            // Recovered
+            
             '<article class="fl-card fl-kpi" data-action="nav" data-target="billing"><div class="fl-kpi__top"><span class="fl-ico fl-ico--green">' + ico("wallet", 20) + "</span>" +
             (r.delta === null ? "" : chip(r.delta >= 0 ? "green" : "red", r.delta >= 0 ? "up" : "dn", pct(Math.abs(r.delta)))) + "</div>" +
             '<div class="fl-kpi__label">Recovered ' + esc(r.scope) + '</div><div class="fl-kpi__value">' + moneyK(r.amount) + "</div>" +
             '<div class="fl-kpi__foot"><span><b>' + pct(r.rate) + "</b> damage recovery rate</span>" + lineSpark(r.spark) + "</div></article>" +
-            // Avg billing time
+            
             '<article class="fl-card fl-kpi"><div class="fl-kpi__top"><span class="fl-ico fl-ico--purple">' + ico("clock", 20) + "</span>" +
             chip(inside ? "green" : "red", inside ? "dn" : "up", Math.abs(Math.round(b.target - b.minutes)) + " min") + "</div>" +
             '<div class="fl-kpi__label">Avg. billing time</div><div class="fl-kpi__value">' + minSec(b.minutes) + "</div>" +
@@ -388,7 +388,6 @@ sap.ui.define([], function () {
             '<div class="fl-ring">' + ring(c.flags, m.fleet.count) + "<span><b>" + c.flags + "</b><small>flags</small></span></div></article>";
     }
 
-    // ------------------------------------------------------------------ public
     function page(m, cfg) {
         return sidebar(m, cfg) +
             '<div class="fl-main">' + topbar(m, cfg) + '<div class="fl-content">' + header(m, cfg) + kpis(m, cfg) +
@@ -402,7 +401,6 @@ sap.ui.define([], function () {
         return '<div class="fl-loading"><div class="fl-spinner"></div><span>Loading dashboard\u2026</span></div>';
     }
 
-    // Hover tooltip for the area chart
     function bindChart(root) {
         var wrap = root.querySelector(".fl-chart");
         if (!wrap) { return; }
