@@ -1,0 +1,47 @@
+<core:FragmentDefinition
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m">
+    <VBox
+        id="damagePhotosBox"
+        width="100%"
+        core:require="{ handler: 'inspections/ext/fragment/PhotoSection' }">
+        <OverflowToolbar
+            id="damagePhotosToolbar"
+            style="Clear"
+            visible="{perm>/canUploadPhotos}">
+            <Text id="damagePhotosHint" text="{i18n>photoHint}" />
+            <ToolbarSpacer id="damagePhotosSpacer" />
+            <Button
+                id="takeDamagePhotoButton"
+                text="{i18n>takePhoto}"
+                icon="sap-icon://camera"
+                type="Emphasized"
+                press="handler.onTakeDamagePhoto" />
+        </OverflowToolbar>
+        <HBox
+            id="damagePhotoGallery"
+            wrap="Wrap"
+            items="{
+                path: 'damagephotos',
+                parameters: {
+                    $$ownRequest: true,
+                    $select: 'ID,FILE_NAME,SHOT_TYPE,UPLOADED_AT,UPLOADED_BY',
+                    $orderby: 'UPLOADED_AT desc'
+                },
+                templateShareable: false
+            }">
+            <VBox id="damagePhotoItem" class="sapUiSmallMarginEnd sapUiSmallMarginBottom" width="176px">
+                <Image
+                    id="damagePhotoThumbnail"
+                    src="{ parts: [ { path: 'perm>/serviceUrl' }, { path: 'ID' } ], formatter: 'handler.thumbnailUrl' }"
+                    alt="{FILE_NAME}"
+                    width="176px"
+                    height="132px"
+                    densityAware="false"
+                    press="handler.onOpenPhoto" />
+                <Text id="damagePhotoUploadedAt" text="{UPLOADED_AT}" wrapping="false" />
+                <Text id="damagePhotoUploadedBy" text="{UPLOADED_BY}" wrapping="false" />
+            </VBox>
+        </HBox>
+    </VBox>
+</core:FragmentDefinition>

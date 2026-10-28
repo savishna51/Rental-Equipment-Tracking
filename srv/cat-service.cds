@@ -1,4 +1,6 @@
 using { retcl as database } from '../db/schema';
+using { retcl } from '../db/criticality';
+using from '../db/media';
 
 annotate CatalogService.CustomerSrv with @odata.draft.enabled;
 annotate CatalogService.RentalSrv with @odata.draft.enabled;
@@ -182,5 +184,22 @@ action createDamageRecords(input : createDamageRecordsIP) returns String;
     { grant: '*', to: ['YardWorker', 'Technician', 'Dispatcher', 'Manager', 'Admin'] }
 ]
 action createDamagePhotos(input : createDamagePhotosIP) returns String;
+
+@requires: 'YardWorker'
+action uploadDamagePhoto(
+    conditionId : database.common.Guid,
+    damageId   : database.common.Guid,
+    shotType   : String(20),
+    fileName   : database.common.String255,
+    mediaType  : database.common.String100,
+    content    : LargeString,
+    thumbnail  : LargeString,
+    sha256     : String(64),
+    capturedAt : Timestamp,
+    latitude   : Decimal(9,6),
+    longitude  : Decimal(9,6)
+) returns database.common.Guid;
+
+function canUploadPhotos() returns Boolean;
 
 }

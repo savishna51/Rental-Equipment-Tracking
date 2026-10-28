@@ -12,14 +12,18 @@ build-parameters:
       commands:
         - npm ci
         - npx cds build --production
-        - rm -rf app/router/public/com.retcl.billing.billing
+        - rm -rf app/router/public
+        - mkdir -p app/router/public
+        - cp -r app/retcldashboard/webapp/. app/router/public/
+        - cp -r app/fleet/webapp app/router/public/fleet
+        - cp -r app/inspections/webapp app/router/public/inspections
         - cp -r app/billing/webapp app/router/public/com.retcl.billing.billing
+        - cp -r app/maintenance/webapp app/router/public/com.retcl.maintenance.maintenance
+        - cp -r app/customers/webapp app/router/public/com.retcl.customers.customers
+        - cp -r app/rentals/webapp app/router/public/com.retcl.rentals.rentals
 
 modules:
 
-  # ============================================================
-  # APPLICATION ROUTER
-  # ============================================================
   - name: retcl-router
     type: approuter.nodejs
     path: app/router

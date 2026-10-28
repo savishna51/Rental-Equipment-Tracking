@@ -99,7 +99,7 @@
           "target": "DamageRecordSrvObjectPage"
         }
       ],
-      "targets": {
+            "targets": {
         "ConditionLogSrvList": {
           "type": "Component",
           "id": "ConditionLogSrvList",
@@ -139,6 +139,20 @@
                     "route": "DamageRecordSrvObjectPage"
                   }
                 }
+              },
+              "content": {
+                "body": {
+                  "sections": {
+                    "InspectionPhotos": {
+                      "template": "inspections.ext.fragment.InspectionPhotos",
+                      "title": "{i18n>inspectionPhotos}",
+                      "position": {
+                        "placement": "After",
+                        "anchor": "GeneratedFacet1"
+                      }
+                    }
+                  }
+                }
               }
             }
           }
@@ -150,7 +164,21 @@
           "options": {
             "settings": {
               "editableHeaderContent": false,
-              "contextPath": "/ConditionLogSrv/damagerecords"
+              "contextPath": "/ConditionLogSrv/damagerecords",
+              "content": {
+                "body": {
+                  "sections": {
+                    "DamagePhotos": {
+                      "template": "inspections.ext.fragment.DamagePhotos",
+                      "title": "{i18n>damagePhotos}",
+                      "position": {
+                        "placement": "After",
+                        "anchor": "DamageFacet"
+                      }
+                    }
+                  }
+                }
+              }
             }
           }
         }

@@ -1,9 +1,48 @@
 using CatalogService as service from '../../srv/cat-service';
 
 annotate service.RepairBillSrv with @(
+    UI.SelectionFields : [
+        BILLING_STATUS,
+        APPROVAL_LEVEL,
+        CUSTOMER_ID,
+        BILL_DATE,
+    ],
+    UI.HeaderInfo : {
+        TypeName       : 'Repair Bill',
+        TypeNamePlural : 'Repair Bills',
+        Title          : { Value : CUSTOMER.COMPANY_NAME },
+        Description    : { Value : BILL_DATE },
+    },
+    UI.DataPoint #Status : {
+        Value       : BILLING_STATUS,
+        Title       : '{i18n>BILLING_STATUS}',
+        Criticality : STATUS_CRITICALITY,
+        CriticalityRepresentation : #WithIcon,
+    },
+    UI.HeaderFacets : [
+        {
+            $Type  : 'UI.ReferenceFacet',
+            Target : '@UI.DataPoint#Status',
+        },
+    ],
     UI.FieldGroup #GeneratedGroup : {
         $Type : 'UI.FieldGroupType',
         Data : [
+            {
+                $Type : 'UI.DataField',
+                Label : '{i18n>CUSTOMER}',
+                Value : CUSTOMER_ID,
+            },
+            {
+                $Type : 'UI.DataField',
+                Label : '{i18n>RENTAL}',
+                Value : RENTAL_ID,
+            },
+            {
+                $Type : 'UI.DataField',
+                Label : '{i18n>DAMAGE}',
+                Value : DAMAGE_ID,
+            },
             {
                 $Type : 'UI.DataField',
                 Label : '{i18n>BILL_DATE}',
@@ -26,17 +65,25 @@ annotate service.RepairBillSrv with @(
             },
             {
                 $Type : 'UI.DataField',
+                Label : '{i18n>APPROVAL_LEVEL}',
+                Value : APPROVAL_LEVEL,
+            },
+            {
+                $Type : 'UI.DataField',
                 Label : '{i18n>BILLING_STATUS}',
                 Value : BILLING_STATUS,
+                Criticality : STATUS_CRITICALITY,
+                CriticalityRepresentation : #WithIcon,
             },
             {
                 $Type : 'UI.DataField',
                 Label : '{i18n>S4_BILLING_DOCUMENT_ID}',
                 Value : S4_BILLING_DOCUMENT_ID,
+                Criticality : S4_CRITICALITY,
+                CriticalityRepresentation : #WithIcon,
             },
         ],
     },
-
     UI.Facets : [
         {
             $Type : 'UI.ReferenceFacet',
@@ -45,7 +92,6 @@ annotate service.RepairBillSrv with @(
             Target : '@UI.FieldGroup#GeneratedGroup',
         },
     ],
-
     UI.LineItem : [
         {
             $Type : 'UI.DataField',
@@ -69,8 +115,22 @@ annotate service.RepairBillSrv with @(
         },
         {
             $Type : 'UI.DataField',
+            Label : '{i18n>APPROVAL_LEVEL}',
+            Value : APPROVAL_LEVEL,
+        },
+        {
+            $Type : 'UI.DataField',
             Label : '{i18n>BILLING_STATUS}',
             Value : BILLING_STATUS,
+            Criticality : STATUS_CRITICALITY,
+            CriticalityRepresentation : #WithIcon,
+        },
+        {
+            $Type : 'UI.DataField',
+            Label : '{i18n>S4_BILLING_DOCUMENT_ID}',
+            Value : S4_BILLING_DOCUMENT_ID,
+            Criticality : S4_CRITICALITY,
+            CriticalityRepresentation : #WithIcon,
         },
     ],
 );

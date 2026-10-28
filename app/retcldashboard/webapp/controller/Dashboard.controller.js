@@ -90,7 +90,7 @@ sap.ui.define([
             }
         },
 
-        _read: function (key) {
+                _read: function (key) {
             var model = this.getOwnerComponent().getModel();
             var def = READS[key];
             return model.bindList("/" + def[0], null, [], [], { $select: def[1] })
@@ -98,7 +98,11 @@ sap.ui.define([
                 .then(function (ctxs) { return ctxs.map(function (c) { return c.getObject(); }); })
                 .catch(function (err) {
                     var msg = String(err && err.message || "");
-                    var denied = err && (err.status === 403 || err.status === 401 || /\b(403|401)\b|forbidden|unauthori[sz]ed/i.test(msg));
+                    if (err && (err.status === 401 || /\b401\b|unauthori[sz]ed/i.test(msg))) {
+                        this._toLogin();
+                        return [];
+                    }
+                    var denied = err && (err.status === 403 || /\b403\b|forbidden/i.test(msg));
                     if (denied) {
                         Log.info("Dashboard: no permission to read " + def[0]);
                     } else {
@@ -107,6 +111,13 @@ sap.ui.define([
                     }
                     return [];
                 }.bind(this));
+        },
+
+        _toLogin: function () {
+            if (this._redirecting) { return; }
+            this._redirecting = true;
+            window.clearInterval(this._timer);
+            window.location.reload();
         },
 
         _load: function (silent) {
@@ -246,7 +257,7 @@ sap.ui.define([
                     break;
 
                 case "logout":
-                    window.location.href = "/do/logout";
+                    window.location.href = "/do/logout?returnTo=" + encodeURIComponent(window.location.pathname + window.location.search);
                     break;
                 case "close-panel":
                     this._ui.panel = "";

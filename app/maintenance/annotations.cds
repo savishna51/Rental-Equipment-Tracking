@@ -1,9 +1,49 @@
 using CatalogService as service from '../../srv/cat-service';
 
 annotate service.MaintenanceRecordSrv with @(
+    UI.SelectionFields : [
+        STATUS,
+        SERVICE_DUE_STATUS,
+        MAINTENANCE_TYPE,
+        EQUIPMENT_ID,
+        NEXT_MAINTENANCE_DATE,
+    ],
+    UI.HeaderInfo : {
+        TypeName       : 'Maintenance Record',
+        TypeNamePlural : 'Maintenance Records',
+        Title          : { Value : EQUIPMENT.EQUIPMENT_NAME },
+        Description    : { Value : MAINTENANCE_TYPE },
+    },
+    UI.DataPoint #Status : {
+        Value       : STATUS,
+        Title       : '{i18n>STATUS}',
+        Criticality : STATUS_CRITICALITY,
+        CriticalityRepresentation : #WithIcon,
+    },
+    UI.DataPoint #NextService : {
+        Value       : SERVICE_DUE_STATUS,
+        Title       : '{i18n>SERVICE_DUE_STATUS}',
+        Criticality : NEXT_SERVICE_CRITICALITY,
+        CriticalityRepresentation : #WithIcon,
+    },
+    UI.HeaderFacets : [
+        {
+            $Type  : 'UI.ReferenceFacet',
+            Target : '@UI.DataPoint#Status',
+        },
+        {
+            $Type  : 'UI.ReferenceFacet',
+            Target : '@UI.DataPoint#NextService',
+        },
+    ],
     UI.FieldGroup #GeneratedGroup : {
         $Type : 'UI.FieldGroupType',
         Data : [
+            {
+                $Type : 'UI.DataField',
+                Label : '{i18n>EQUIPMENT}',
+                Value : EQUIPMENT_ID,
+            },
             {
                 $Type : 'UI.DataField',
                 Label : '{i18n>MAINTENANCE_TYPE}',
@@ -33,15 +73,25 @@ annotate service.MaintenanceRecordSrv with @(
                 $Type : 'UI.DataField',
                 Label : '{i18n>NEXT_MAINTENANCE_DATE}',
                 Value : NEXT_MAINTENANCE_DATE,
+                Criticality : NEXT_SERVICE_CRITICALITY,
+                CriticalityRepresentation : #WithIcon,
+            },
+            {
+                $Type : 'UI.DataField',
+                Label : '{i18n>SERVICE_DUE_STATUS}',
+                Value : SERVICE_DUE_STATUS,
+                Criticality : NEXT_SERVICE_CRITICALITY,
+                CriticalityRepresentation : #WithIcon,
             },
             {
                 $Type : 'UI.DataField',
                 Label : '{i18n>STATUS}',
                 Value : STATUS,
+                Criticality : STATUS_CRITICALITY,
+                CriticalityRepresentation : #WithIcon,
             },
         ],
     },
-
     UI.Facets : [
         {
             $Type : 'UI.ReferenceFacet',
@@ -50,7 +100,6 @@ annotate service.MaintenanceRecordSrv with @(
             Target : '@UI.FieldGroup#GeneratedGroup',
         },
     ],
-
     UI.LineItem : [
         {
             $Type : 'UI.DataField',
@@ -76,6 +125,27 @@ annotate service.MaintenanceRecordSrv with @(
             $Type : 'UI.DataField',
             Label : '{i18n>COST}',
             Value : COST,
+        },
+        {
+            $Type : 'UI.DataField',
+            Label : '{i18n>NEXT_MAINTENANCE_DATE}',
+            Value : NEXT_MAINTENANCE_DATE,
+            Criticality : NEXT_SERVICE_CRITICALITY,
+            CriticalityRepresentation : #WithIcon,
+        },
+        {
+            $Type : 'UI.DataField',
+            Label : '{i18n>SERVICE_DUE_STATUS}',
+            Value : SERVICE_DUE_STATUS,
+            Criticality : NEXT_SERVICE_CRITICALITY,
+            CriticalityRepresentation : #WithIcon,
+        },
+        {
+            $Type : 'UI.DataField',
+            Label : '{i18n>STATUS}',
+            Value : STATUS,
+            Criticality : STATUS_CRITICALITY,
+            CriticalityRepresentation : #WithIcon,
         },
     ],
 );

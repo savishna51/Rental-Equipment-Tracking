@@ -1,16 +1,3 @@
-/*
- * RETCL authorization - the six roles from the FRD (Auditor is intentionally not used)
- *
- *   YardWorker    scan, inspect, transfer
- *   Dispatcher    check-out, override with reason
- *   Technician    repairs, release quarantine
- *   BillingClerk  approve and dispute charges
- *   Manager       all approvals, dashboards, overrides
- *   Admin         configuration, master data, full access
- *
- * Repair bills (prices) stay hidden from YardWorker, Dispatcher and Technician.
- */
-
 using CatalogService from './cat-service';
 
 annotate CatalogService.CustomerSrv with @restrict: [
@@ -117,7 +104,7 @@ annotate CatalogService.DamagePhotoSrv with @restrict: [
     },
     {
         grant: ['CREATE'],
-        to: ['YardWorker', 'Technician', 'Dispatcher', 'Manager', 'Admin']
+        to: ['YardWorker']
     },
     {
         grant: ['UPDATE', 'DELETE'],
@@ -177,4 +164,4 @@ annotate CatalogService.createMaintenanceRecords with @requires: ['Technician', 
 
 annotate CatalogService.createDamageRecords with @requires: ['YardWorker', 'Technician', 'Dispatcher', 'Manager', 'Admin'];
 
-annotate CatalogService.createDamagePhotos with @requires: ['YardWorker', 'Technician', 'Dispatcher', 'Manager', 'Admin'];
+annotate CatalogService.createDamagePhotos with @requires: 'YardWorker';
